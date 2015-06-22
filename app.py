@@ -57,17 +57,30 @@ def add():
 
 @app.route('/update/<int:post_id>' , methods=['POST', 'GET'])
 def update(post_id):
-    Session = sessionmaker(bind=engine)
-    s = Session()
-    post=s.query(Post).get(post_id)
+    if not session.get('logged_in'):
+        return render_template('login.html')
+    else:
+        Session = sessionmaker(bind=engine)
+        s = Session()
+        post=s.query(Post).get(post_id)
+        if (request.method == 'POST'):
+             post1=Post(request.form['title'], request.form['body'])
+             s.query(Post).filter_by(id=post_id).update({"title": post1.title, "body": post1.body, "updated_at": datetime.utcnow()})
+             s.commit()	
+        return render_template('update.html', post=post)	
 
-    if (request.method == 'POST'):
-
-        post1=Post(request.form['title'], request.form['body'])
-        s.query(Post).filter_by(id=post_id).update({"title": post1.title, "body": post1.body, "updated_at": datetime.utcnow()})
-        s.commit()	
-    return render_template('update.html', post=post)	
-
+@app.route('/delete/<int:post_id>')
+def delete(post_id):  
+    if not session.get('logged_in'):
+        return render_template('login.html')
+ 
+    else: 
+	Session = sessionmaker(bind=engine)
+        s = Session()
+        post = s.query(Post).get(post_id)
+        s.delete(post) 
+        s.commit()
+        return "deleted"
  
 @app.route('/show/', methods=['POST', 'GET'])
 def show():  
@@ -82,20 +95,6 @@ def show_single(post_id):
     s = Session()
     post = s.query(Post).get(post_id)
     return render_template('blog_single.html', post=post)
-
-@app.route('/delete/<int:post_id>')
-def delete(post_id):  
-    if not session.get('logged_in'):
-        return render_template('login.html')
- 
-    else: 
-	Session = sessionmaker(bind=engine)
-        s = Session()
-        post = s.query(Post).get(post_id)
-        s.delete(post) 
-        s.commit()
-        return "deleted"
-
 
 
 if __name__ == '__main__':
