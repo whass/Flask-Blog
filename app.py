@@ -6,15 +6,19 @@ from datetime import datetime
 
 engine = create_engine('sqlite:///dbMyBlog.db', echo=True)
  
-app = Flask(__name__)
+app = Flask(__name__,  static_url_path='')
 
- 
+@app.route('/static/<path:path>')
+def send_static(path):
+    return send_from_directory('static', path)
+
 @app.route('/')
 def home():
-    if not session.get('logged_in'):
-        return render_template('login.html')
-    else:
-        return "Hello Boss!"
+    Session = sessionmaker(bind=engine)
+    s = Session()
+    post = s.query(Post).all()
+    return render_template('index.html', post=post)
+
  
 @app.route('/login', methods=['GET','POST'])
 def login():
