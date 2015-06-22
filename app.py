@@ -86,12 +86,12 @@ def delete(post_id):
         s.commit()
         return "deleted"
  
-@app.route('/show/', methods=['POST', 'GET'])
-def show():  
+@app.route('/posts/', methods=['POST', 'GET'])
+def posts():  
     Session = sessionmaker(bind=engine)
     s = Session()
     post = s.query(Post).all()
-    return render_template('blog.html', post=post)
+    return render_template('posts.html', post=post)
 
 @app.route('/show/<int:post_id>')
 def show_single(post_id):  
