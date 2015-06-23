@@ -10,7 +10,7 @@ Base = declarative_base()
 
 class User(Base):
     """"""
-    __tablename__ = "users"
+    __tablename__ = "user"
 
     id = Column(Integer, primary_key=True)
     username = Column(String)
@@ -25,19 +25,34 @@ class User(Base):
 
 class Post(Base):
     """"""
-    __tablename__ = "Blog"
+    __tablename__ = "post"
 
     id = Column(Integer, primary_key=True)
     title = Column(String(100), unique=True)
     body = Column(Text)
 
-    created_at = Column(DateTime, default=datetime.utcnow())
-    updated_at = Column(DateTime, onupdate=datetime.utcnow())
+    created_at = Column(DateTime, default=datetime.now())
+    updated_at = Column(DateTime, onupdate=datetime.now())
 
-    def __init__(self, title, body):
+    category_id = Column(Integer, ForeignKey('category.id'))
+    category = relationship('Category', backref=backref('posts'))
+
+    def __init__(self, title, body, category_id):
         """"""
         self.title = title
         self.body = body
+        self.category_id = category_id
+
+class Category(Base):
+    __tablename__ = "category"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50))
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return '<Category %r>' % self.name
 
 
 # create tables
