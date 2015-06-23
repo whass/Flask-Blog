@@ -1,7 +1,7 @@
 from flask import Flask, flash, redirect, render_template, request, session, abort
 import os
 from sqlalchemy.orm import sessionmaker
-from models import User, Post, create_engine
+from models import User, Post, create_engine, Category
 from datetime import datetime
 
 engine = create_engine('sqlite:///dbMyBlog.db', echo=True)
@@ -14,10 +14,7 @@ def send_static(path):
 
 @app.route('/')
 def home():
-    Session = sessionmaker(bind=engine)
-    s = Session()
-    post = s.query(Post).all()
-    return render_template('index.html', post=post)
+    return render_template('index.html')
 
  
 @app.route('/login', methods=['GET','POST'])
@@ -49,11 +46,13 @@ def add():
     if not session.get('logged_in'):
         return render_template('login.html')
 
+
     if (request.method == 'POST'):
-        post=Post(request.form['title'], request.form['body'])
 	
 	Session = sessionmaker(bind=engine)
 	s = Session()
+
+        post=Post(request.form['title'], request.form['body'], request.form['category_id'])
 
 	s.add(post)
         s.commit()
@@ -68,8 +67,8 @@ def update(post_id):
         s = Session()
         post=s.query(Post).get(post_id)
         if (request.method == 'POST'):
-             post1=Post(request.form['title'], request.form['body'])
-             s.query(Post).filter_by(id=post_id).update({"title": post1.title, "body": post1.body, "updated_at": datetime.utcnow()})
+             post1=Post(request.form['title'], request.form['body'], request.form['category_id'])
+             s.query(Post).filter_by(id=post_id).update({"title": post1.title, "body": post1.body, "category_id":post1.category_id, "updated_at": datetime.utcnow()})
              s.commit()	
         return render_template('update.html', post=post)	
 
@@ -93,12 +92,69 @@ def posts():
     post = s.query(Post).all()
     return render_template('posts.html', post=post)
 
-@app.route('/show/<int:post_id>')
-def show_single(post_id):  
+@app.route('/post/<int:post_id>')
+def post(post_id):  
     Session = sessionmaker(bind=engine)
     s = Session()
     post = s.query(Post).get(post_id)
-    return render_template('blog_single.html', post=post)
+    return render_template('post.html', post=post)
+
+
+@app.route('/add_category/' , methods=['POST', 'GET'])
+def add_category():
+    if not session.get('logged_in'):
+        return render_template('login.html')
+
+    if (request.method == 'POST'):
+        category=Category(request.form['name'])
+	
+	Session = sessionmaker(bind=engine)
+	s = Session()
+
+	s.add(category)
+        s.commit()
+    return render_template('add_category.html')	
+
+@app.route('/update_category/<int:category_id>' , methods=['POST', 'GET'])
+def update_category(category_id):
+    if not session.get('logged_in'):
+        return render_template('login.html')
+    else:
+        Session = sessionmaker(bind=engine)
+        s = Session()
+        category=s.query(Category).get(category_id)
+        if (request.method == 'POST'):
+             category1=Category(request.form['name'])
+             s.query(Category).filter_by(id=category_id).update({"name": category1.name})
+             s.commit()	
+        return render_template('update_category.html', category=category)	
+
+@app.route('/delete_category/<int:category_id>')
+def delete_category(category_id):  
+    if not session.get('logged_in'):
+        return render_template('login.html')
+ 
+    else: 
+	Session = sessionmaker(bind=engine)
+        s = Session()
+        category = s.query(Category).get(category_id)
+        s.delete(category) 
+        s.commit()
+        return "deleted"
+ 
+@app.route('/categories/', methods=['POST', 'GET'])
+def categories():  
+    Session = sessionmaker(bind=engine)
+    s = Session()
+    categories = s.query(Category).all()
+    return render_template('categories.html', categories=categories)
+
+@app.route('/category/<int:category_id>')
+def category(category_id):  
+    Session = sessionmaker(bind=engine)
+    s = Session()
+    category = s.query(Category).get(category_id)
+    return render_template('category.html', category=category)
 
 
 if __name__ == '__main__':
