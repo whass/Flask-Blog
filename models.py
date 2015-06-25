@@ -29,6 +29,7 @@ class Post(Base):
 
     id = Column(Integer, primary_key=True)
     title = Column(String(100), unique=True)
+    description = Column(String(200), unique=True)
     body = Column(Text)
 
     created_at = Column(DateTime, default=datetime.now())
@@ -40,6 +41,7 @@ class Post(Base):
     def __init__(self, title, body, category_id):
         """"""
         self.title = title
+        self.description = description
         self.body = body
         self.category_id = category_id
 
