@@ -4,31 +4,42 @@ from sqlalchemy.orm import sessionmaker
 from models import User, Post, create_engine, Category
 from datetime import datetime
 
+
 engine = create_engine('sqlite:///dbMyBlog.db', echo=True)
  
 app = Flask(__name__,  static_url_path='')
 
-@app.route('/static/<path:path>')
-def send_static(path):
-    return send_from_directory('static', path)
+
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
+
+@app.route('/static/<path:path>')
+def send_static(path):
+    return send_from_directory('static', path)
+
+
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+@app.route('/research')
+def research():
+    return render_template('research.html')
+
+@app.route('/hire')
+def hire():
+    return render_template('hire.html')
  
 @app.route('/login', methods=['GET','POST'])
 def login():
-    if session.get('logged_in'):
-        return "your are logged already"
-
     if request.method == 'POST':
-	POST_USERNAME = str(request.form['username'])
-    	POST_PASSWORD = str(request.form['password'])
-
     	Session = sessionmaker(bind=engine)
     	s = Session()
-    	query = s.query(User).filter(User.username.in_([POST_USERNAME]), User.password.in_([POST_PASSWORD]) )
+    	query = s.query(User).filter(User.username.in_('username'), User.password.in_('password') )
     	result = query.first()
     	if result:
              session['logged_in'] = True
@@ -43,20 +54,18 @@ def logout():
 
 @app.route('/add/' , methods=['POST', 'GET'])
 def add():
+    Session = sessionmaker(bind=engine)
+    s = Session()
+    categories = s.query(Category).all()
+
     if not session.get('logged_in'):
         return render_template('login.html')
 
-
-    if (request.method == 'POST'):
-	
-	Session = sessionmaker(bind=engine)
-	s = Session()
-
-        post=Post(request.form['title'], request.form['body'], request.form['category_id'])
-
+    if (request.method == 'POST'):	
+        post=Post(request.form['title'], request.form['description'], request.form['body'], request.form['category_id'])
 	s.add(post)
         s.commit()
-    return render_template('add.html')	
+    return render_template('add.html', categories=categories)	
 
 @app.route('/update/<int:post_id>' , methods=['POST', 'GET'])
 def update(post_id):
@@ -67,7 +76,7 @@ def update(post_id):
         s = Session()
         post=s.query(Post).get(post_id)
         if (request.method == 'POST'):
-             post1=Post(request.form['title'], request.form['body'], request.form['category_id'])
+             post1=Post(request.form['title'], request.form['description'], request.form['body'], request.form['category_id'])
              s.query(Post).filter_by(id=post_id).update({"title": post1.title, "body": post1.body, "category_id":post1.category_id, "updated_at": datetime.utcnow()})
              s.commit()	
         return render_template('update.html', post=post)	
@@ -90,7 +99,8 @@ def posts():
     Session = sessionmaker(bind=engine)
     s = Session()
     post = s.query(Post).all()
-    return render_template('posts.html', post=post)
+    category = s.query(Category).all()
+    return render_template('posts.html', post=post, category=category)
 
 @app.route('/post/<int:post_id>')
 def post(post_id):  
