@@ -29,8 +29,8 @@ class Post(Base):
 
     id = Column(Integer, primary_key=True)
     title = Column(String(100), unique=True)
-    description = Column(String(200), unique=True)
-    body = Column(Text)
+    description = Column(Text)
+    body = Column(UnicodeText)
 
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, onupdate=datetime.now())
@@ -38,7 +38,7 @@ class Post(Base):
     category_id = Column(Integer, ForeignKey('category.id'))
     category = relationship('Category', backref=backref('posts'))
 
-    def __init__(self, title, body, category_id):
+    def __init__(self, title, description, body, category_id):
         """"""
         self.title = title
         self.description = description
