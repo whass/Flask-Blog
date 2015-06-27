@@ -1,5 +1,8 @@
 {% extends "layout.html" %}
 
+{% block meta %}
+    <meta name="author" content="Your-Name">
+{% endblock %}
 
 {% block title %}
       Your-Name - Blog

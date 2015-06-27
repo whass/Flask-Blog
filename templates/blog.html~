@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block body %}
+  <ul class="posts">
+  {% for post in post %}
+  <li>
+      <h1>{{ post.title }}</h1>
+      <p>Publié le {{ post.title }}</p>
+  </li>
+  {% endfor %}
+  </ul>
+{% endblock %}

@@ -13,7 +13,8 @@
           &rarr; <a href="{{ url_for('hire') }}" class="selected">hire</a>
 	{% if session['logged_in'] %}
 	  <br>
-          &rarr; <a href="{{ url_for('add') }}" class="" >add post</a>
+          &rarr; <a href="{{ url_for('delete', post_id=post.id) }}" class="" >delete</a>
+          &rarr; <a href="{{ url_for('post', post_id=post.id) }}" class="" >show</a>
           &rarr; <a href="{{ url_for('logout') }}" class="" >logout</a>
 
 	{% else %}

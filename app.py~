@@ -71,7 +71,7 @@ def update(post_id):
         if (request.method == 'POST'):
              s.query(Post).filter_by(id=post_id).update({"title": request.form['title'], "description": request.form['description'], "body": request.form['body'], "category_id":request.form['category_id'], "updated_at": datetime.utcnow()})
              s.commit()
-    return render_template('update.html', post=post, categories=categories)	
+        return render_template('update.html', post=post, categories=categories)	
 
 @app.route('/delete/<int:post_id>')
 def delete(post_id):  

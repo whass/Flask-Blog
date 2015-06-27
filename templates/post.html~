@@ -22,7 +22,6 @@
           &rarr; <a href="{{ url_for('update', post_id=post.id) }}" class="" >update</a>
           &rarr; <a href="{{ url_for('delete', post_id=post.id) }}" class="" >delete</a>
 	{% else %}
-	<br>
           &rarr; <a href="{{ url_for('login') }}" class="" >login</a>
 	{% endif %}
 

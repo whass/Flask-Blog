@@ -12,12 +12,6 @@
           &rarr; <a href="{{ url_for('posts') }}" class="" >blog</a>
           &rarr; <a href="{{ url_for('portfolio') }}" class="" >portfolio</a>
           &rarr; <a href="{{ url_for('hire') }}" class="">hire</a>
-	{% if session['logged_in'] %}
-	  <br>
-          &rarr; <a href="{{ url_for('add') }}" class="" >add post</a>
-          &rarr; <a href="{{ url_for('logout') }}" class="" >logout</a>
-	{% endif %}
-
         </div>
         <a id='logo1' href="/">Your-Name</a>
         <span id='logo2'>#</span>

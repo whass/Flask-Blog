@@ -9,7 +9,7 @@ engine = create_engine('sqlite:///dbMyBlog.db', echo=True)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-user = User("admin","password")
+user = User("a","a")
 session.add(user)
 
 category = Category("category-1")
