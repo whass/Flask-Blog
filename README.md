@@ -14,6 +14,8 @@ git clone
 
 -install the requirments
 
+pip install -r requirements.txt
+
 -build the database
 
 python models.py
