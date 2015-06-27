@@ -1,38 +1,38 @@
 # my-blog is Flask-Python based blog application
 
 The application includes
--Flask
--sqlAlchemy
+* Flask
+* sqlAlchemy
 
 If you want a small and a beautiful blog, this app is for you !
 
 To try the application :
 
--clone the repository
+Clone the repository
 
-git clone 
+* git clone 
 
--install the requirments
+Install the requirments
 
-pip install -r requirements.txt
+* pip install -r requirements.txt
 
--build the database
+Build the database
 
-python models.py
+* python models.py
 
--edit dummies.py :
+Edit dummies.py :
 
--- change admin by your choosen name and password by your own password
+* change admin by your choosen name and password by your own password
 
--- add some categorie 
+* add some categorie 
 
--- add some post 
+* add some post 
 
-execute python dummies.py
+* execute python dummies.py
 
--Launch the server
+Launch the server
 
-python app.py
+* python app.py
 
 Access http://localhost:5000/ to see the blog
 
