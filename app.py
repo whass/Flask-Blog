@@ -3,9 +3,11 @@ import os
 from sqlalchemy.orm import sessionmaker
 from models import User, Post, create_engine, Category
 from datetime import datetime
+from flask_frozen import Freezer
 
 engine = create_engine('sqlite:///dbMyBlog.db', echo=True)
- 
+
+freezer = Freezer(app)
 app = Flask(__name__,  static_url_path='')
 
 
@@ -161,8 +163,10 @@ def category(category_id):
 
 
 if __name__ == '__main__':
-    app.secret_key = os.urandom(12)
-    app.debug = True
-    app.run()
-
-
+    if len(sys.argv) > 1 and sys.argv[1] == "build":
+        freezer.freeze()
+    else:
+        app.run(debug=True)	
+        app.secret_key = os.urandom(12)
+        app.debug = True
+        app.run()
