@@ -1,4 +1,4 @@
-# my-blog is Flask-Python based blog application
+# Flask-Blog is Flask-Python based blog application
 
 The application includes
 * Flask
