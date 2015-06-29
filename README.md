@@ -1,8 +1,9 @@
-# Flask-Blog is Flask-Python based blog application
+# Flask-Blog is Flask-Python Frozen-Flask based blog application and github page ready
 
 The application includes
 * Flask
 * sqlAlchemy
+* Frozen
 
 If you want a small and a beautiful blog, this app is for you !
 
@@ -36,6 +37,11 @@ Launch the server
 
 Access http://localhost:5000/ to see the blog
 
+If you want to generate a static version of the blog, to host it in github page for example, do :
+
+* python app.py build
+
+The static file will be stored in buid directory.
 
 
 
